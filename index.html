@@ -158,6 +158,21 @@
 
   /* helper spacers */
   .mb-6{ margin-bottom:24px }
+/* 手機上讓「學習／練習」兩顆按鈕同一行 */
+@media (max-width: 480px){
+  nav{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 兩欄 */
+    gap: 8px;                /* 讓間距小一點以免擠不下 */
+    justify-content: center; /* 保持置中 */
+  }
+  .pill{
+    width: 100%;             /* 各佔一半寬 */
+    padding: 10px 12px;      /* 手機上縮小一點內距 */
+    font-size: 16px;         /* 手機上縮小字級以免換行 */
+  }
+}
+
 </style>
 </head>
 <body>
@@ -535,3 +550,4 @@
 </script>
 </body>
 </html>
+

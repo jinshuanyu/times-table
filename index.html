@@ -221,6 +221,37 @@
 @media (max-width: 480px){
   .question-box{ transform: none; }
 }
+/* 📱 手機：1x~10x 每排 3 個，按鈕更寬更好按 */
+@media (max-width: 600px){
+  /* 乘數選單改 3 欄 */
+  #practicePage .grid-multipliers{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    max-width: 100% !important;
+  }
+
+  /* 🎲 綜合練習 仍占滿一整列，和下面數字留距離 */
+  #practicePage .grid-multipliers > button[data-val="all"]{
+    grid-column: 1 / -1;
+    margin-bottom: 14px;
+  }
+
+  /* 數字按鈕撐滿格子、加大觸控面積 */
+  #practicePage .grid-multipliers > .btn-multi{
+    width: 100%;
+    min-height: 54px;           /* 手指更好點 */
+    padding: 12px 8px;          /* 橫向更飽滿 */
+    font-size: 20px;            /* 視覺再清楚一點 */
+    justify-content: center;    /* 文案置中保險 */
+  }
+}
+/* 整站底色：很淡、低彩度的粉紅 */
+:root{
+  --bg: hsl(345 25% 98%);  /* 345° 粉紅相近色，25% 彩度、98% 亮度 */
+}
+body{
+  background: var(--bg) !important; /* 覆蓋任何先前設定 */
+}
 
 </style>
 
@@ -602,6 +633,7 @@
 </script>
 </body>
 </html>
+
 
 
 

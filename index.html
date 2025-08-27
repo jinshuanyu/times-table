@@ -172,6 +172,32 @@
     font-size: 16px;         /* 手機上縮小字級以免換行 */
   }
 }
+/* 📱 讓乘法表在手機上更大、更貼近螢幕邊緣 */
+@media (max-width: 480px){
+
+  /* 把學習頁乘法表左右邊距吃掉一點，讓表格更寬 */
+  #learningPage .table-wrap{
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  /* 放大表格字體（原本是 clamp(12px, 2.3vw, 18px)） */
+  #learningPage table.mul{
+    font-size: clamp(14px, 4.2vw, 20px);
+  }
+
+  /* 稍微加大儲存格內距，閱讀更舒服 */
+  #learningPage .mul th,
+  #learningPage .mul td{
+    padding: 8px 8px;
+  }
+
+  /* （可選）標題也放大一點，整體更均衡 */
+  #learningPage .title{
+    font-size: clamp(26px, 7vw, 42px);
+    margin-bottom: 16px;
+  }
+}
 
 </style>
 </head>
@@ -550,4 +576,5 @@
 </script>
 </body>
 </html>
+
 

@@ -221,6 +221,35 @@
     }
     .pill{ width:100%; padding:10px 12px; font-size:16px }
   }
+/* 📱 手機：讓乘法表更貼近螢幕邊緣 */
+@media (max-width: 480px){
+  /* 外層容器左右縮到 8px（或你想要 0px） */
+  .wrap{ padding-left: 8px; padding-right: 8px; }
+
+  /* 主要內容去掉內距，避免重複留白 */
+  main{ padding: 0; }
+
+  /* 乘法表容器「吃回」外層 8px，幾乎貼邊 */
+  #learningPage .table-wrap{
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-left: 2px;   /* 給 2px 緩衝，避免視覺緊張 */
+    padding-right: 2px;
+  }
+}
+/* 💻 桌機把整體內容與乘法表都再收窄 */
+@media (min-width: 1024px){
+  /* 整個主要內容容器再窄一點（原本 1100px） */
+  main{ max-width: 900px !important; }
+
+  /* 乘法表容器再窄一點並置中（原本 960px） */
+  #learningPage .table-wrap{
+    max-width: 820px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
 </style>
 
 </head>
@@ -599,6 +628,7 @@
 </script>
 </body>
 </html>
+
 
 
 

@@ -12,24 +12,40 @@
   :root{
     --bg-grad1:#fde2e4; --bg-grad2:#dbeafe;
     --card:#ffffff; --muted:#6b7280; --text:#1f2937; --line:#e5e7eb;
-    --purple-200:#e9d5ff; --purple-300:#d8b4fe; --purple-500:#a855f7;
+
+    --purple-200:#e9d5ff; --purple-300:#d8b4fe; --purple-500:#7c3aed;
     --green-200:#bbf7d0; --green-300:#86efac; --green-500:#22c55e;
+
     --indigo-200:#c7d2fe; --indigo-300:#a5b4fc; --indigo-400:#818cf8;
+    --indigo-700:#4338ca; --indigo-800:#3730a3; --indigo-900:#312e81;
+
     --orange-200:#fed7aa; --orange-300:#fdba74; --orange-500:#f97316;
+
     --yellow-50:#fffbeb; --yellow-100:#fef3c7; --yellow-200:#fde68a;
     --yellow-300:#fcd34d; --yellow-800:#92400e;
+
     --blue-50:#eff6ff; --blue-100:#dbeafe; --blue-200:#bfdbfe; --blue-800:#1e40af;
+
     --teal-50:#f0fdfa; --teal-600:#0d9488;
     --red-500:#ef4444;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
+
+  *{ box-sizing:border-box }
+  html,body{ height:100% }
   body{
-    margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
     color:var(--text);
     background: linear-gradient(135deg,var(--bg-grad1),var(--bg-grad2));
   }
-  .wrap{min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px}
+
+  .wrap{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:16px;
+  }
+
+  /* Top nav pills */
   nav{
     margin-bottom:24px; padding:16px; background:var(--card);
     border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.08);
@@ -39,46 +55,74 @@
     border:0; cursor:pointer; padding:12px 20px; border-radius:999px; font-weight:800; font-size:18px;
     transition:transform .2s ease, background-color .2s ease, box-shadow .2s ease, color .2s ease;
   }
-  .pill:hover{transform:scale(1.05)}
-  .pill-purple{background:var(--purple-200); color:#5b21b6}
-  .pill-purple.active{background:var(--purple-500); color:#fff; box-shadow:0 6px 18px rgba(168,85,247,.35)}
-  .pill-purple:hover{background:var(--purple-300)}
-  .pill-green{background:var(--green-200); color:#065f46}
-  .pill-green.active{background:var(--green-500); color:#fff; box-shadow:0 6px 18px rgba(34,197,94,.35)}
-  .pill-green:hover{background:var(--green-300)}
+  .pill:hover{ transform:scale(1.05) }
+  .pill-purple{ background:var(--purple-200); color:#5b21b6 }
+  .pill-purple.active{ background:var(--purple-500); color:#fff; box-shadow:0 6px 18px rgba(124,58,237,.35) }
+  .pill-purple:hover{ background:var(--purple-300) }
+  .pill-green{ background:var(--green-200); color:#065f46 }
+  .pill-green.active{ background:var(--green-500); color:#fff; box-shadow:0 6px 18px rgba(34,197,94,.35) }
+  .pill-green:hover{ background:var(--green-300) }
 
-  main{width:100%; max-width:1100px; padding:8px; transition:transform .5s ease}
-  section.card{
-    background:transparent; border-radius:20px;
-  }
+  /* Layout */
+  main{ width:100%; max-width:1100px; padding:8px; transition:transform .5s ease }
+  section.card{ background:transparent }
+
   h1.title{
-    font-size:clamp(28px,4vw,44px); margin:0 0 20px; font-weight:900; text-align:center;
+    font-size:clamp(28px,4vw,44px); margin:0 0 18px; font-weight:900; text-align:center;
     color:#2563eb; text-shadow:0 3px 0 rgba(255,255,255,.4);
   }
   .subtitle{ text-align:center; color:var(--muted); margin-top:8px; }
 
-  /* Learning table */
-  .table-wrap{overflow-x:auto}
-  table.mul{
-    width:100%; border:1px solid var(--blue-200); border-collapse:separate; border-spacing:0; background:var(--blue-50);
-    border-radius:14px; box-shadow:0 10px 30px rgba(30,64,175,.08);
-    font-size:clamp(12px,2.3vw,18px);
+  /* ------------------ Learning (10×10 table) ------------------ */
+  .table-wrap{
+    overflow-x:auto;
   }
-  .mul th,.mul td{ padding:6px 6px; border-bottom:1px solid var(--blue-200); text-align:center }
-  .mul thead th{ background:var(--blue-200); color:var(--blue-800); font-weight:800 }
+  table.mul{
+    width:100%;
+    border:1px solid var(--blue-200);
+    border-collapse:collapse;   /* 更緊實、避免陰影夾縫 */
+    background:var(--blue-50);
+    border-radius:0 !important; /* 乘法表不要圓角 */
+    box-shadow:0 10px 30px rgba(30,64,175,.08);
+    font-size:clamp(14px, 4.2vw, 18px); /* 手機比第一次更大一點，但不誇張 */
+    table-layout:fixed;         /* 分欄平均，防溢出 */
+  }
+  .mul th, .mul td{
+    padding:7px 6px;
+    border-bottom:1px solid var(--blue-200);
+    text-align:center;
+    white-space:nowrap;         /* 避免小螢幕換行破表格 */
+  }
+  .mul thead th{
+    background:var(--blue-200); color:var(--blue-800); font-weight:800;
+  }
   .mul tbody td:first-child{
     background:#eaf2ff; color:#1d4ed8; font-weight:800; position:sticky; left:0;
   }
   .mul td.hl, .mul th.hl { background:var(--yellow-100) !important }
   .mul td.hl-strong, .mul th.hl-strong{ background:var(--yellow-300) !important }
 
-  /* Practice */
-  .center{text-align:center}
+  /* 桌機：限制表格最大寬度，避免太扁 */
+  @media (min-width:1024px){
+    #learningPage .table-wrap{
+      max-width:960px;   /* 你可改 900/980/1000 */
+      margin:0 auto;
+    }
+  }
+  /* 手機：輕貼邊 & 不橫滑 */
+  @media (max-width:480px){
+    #learningPage .table-wrap{ padding:0 6px }
+    /* 字體大小已用 clamp 控制到不爆表，不需再降 */
+  }
+
+  /* ------------------ Practice ------------------ */
+  .center{ text-align:center }
   .score{ font-size:clamp(18px,2.5vw,28px); font-weight:800; color:#065f46; margin-bottom:8px }
   .qcount{ font-size:clamp(16px,2.3vw,24px); color:#475569; margin-bottom:18px }
 
   .question-box{
-    display:inline-block; background:var(--yellow-100); padding:24px; border-radius:22px; box-shadow:0 14px 36px rgba(0,0,0,.08);
+    display:inline-block; background:var(--yellow-100); padding:24px;
+    border-radius:20px; box-shadow:0 14px 36px rgba(0,0,0,.08);
     margin-bottom:20px; transform:scale(1.03);
   }
   .question{
@@ -96,15 +140,31 @@
   }
   .btn:hover{ transform:scale(1.05) }
 
+  /* 選項按鈕 */
   .btn-choice{ background:var(--indigo-300); color:#111827 }
   .btn-choice:hover{ background:var(--indigo-400) }
-  .btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.1); box-shadow:0 8px 24px rgba(34,197,94,.4) }
+  .btn-choice.correct{
+    background:var(--green-500) !important; color:#fff !important; transform:scale(1.1);
+    box-shadow:0 8px 24px rgba(34,197,94,.4)
+  }
   .btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.05) }
-  .btn-choice.dim{ opacity:.55; cursor:not-allowed; }
+  .btn-choice.dim{ opacity:.55; cursor:not-allowed }
 
+  /* 乘數選單：一般數字仍用橘色，"綜合練習"選中時深紫藍 */
   .btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(20px,3.5vw,30px) }
   .btn-multi.active{ background:var(--orange-500); color:#fff; box-shadow:0 6px 18px rgba(249,115,22,.35) }
   .btn-multi:hover{ background:var(--orange-300) }
+
+  /* 🎲 綜合練習的「選中態」：深紫藍，超明顯（用 !important 壓過 inline） */
+  .btn-multi[data-val="all"].active{
+    background:var(--indigo-900) !important;
+    color:#fff !important;
+    box-shadow:0 10px 26px rgba(49,46,129,.55) !important;
+    border-color:transparent !important;
+  }
+  .btn-multi[data-val="all"].active:hover{
+    background:var(--indigo-800) !important;
+  }
 
   .btn-start{
     background:#3b82f6; color:#fff; padding:16px 26px; border-radius:999px; font-weight:900; font-size:clamp(20px,3.8vw,32px);
@@ -113,13 +173,9 @@
   .btn-start:disabled{ background:#cbd5e1; color:#475569; cursor:not-allowed; box-shadow:none }
 
   .feedback{ font-size:clamp(20px,3.2vw,32px); font-weight:900; margin-top:10px; animation:bounce 1s infinite }
+  @keyframes bounce{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
 
-  @keyframes bounce{
-    0%,100%{ transform:translateY(0) }
-    50%{ transform:translateY(-6px) }
-  }
-
-  /* Result table */
+  /* 結果表 */
   .result-title{
     font-size:clamp(28px,4vw,44px); font-weight:900; color:var(--teal-600); text-align:center; margin:0 0 16px;
     text-shadow:0 3px 0 rgba(255,255,255,.5)
@@ -152,57 +208,21 @@
 
   .btn-tertiary{
     background:var(--purple-500); color:#fff; border:0; padding:14px 22px; border-radius:999px; font-weight:900;
-    font-size:clamp(18px,3.2vw,28px); transition:transform .15s ease; box-shadow:0 10px 26px rgba(168,85,247,.35)
+    font-size:clamp(18px,3.2vw,28px); transition:transform .15s ease; box-shadow:0 10px 26px rgba(124,58,237,.35)
   }
   .btn-tertiary:hover{ transform:scale(1.05) }
 
-  /* helper spacers */
-  .mb-6{ margin-bottom:24px }
-/* 手機上讓「學習／練習」兩顆按鈕同一行 */
-@media (max-width: 480px){
-  nav{
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 兩欄 */
-    gap: 8px;                /* 讓間距小一點以免擠不下 */
-    justify-content: center; /* 保持置中 */
+  /* 手機：導覽兩顆同排 */
+  @media (max-width:480px){
+    nav{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:8px; justify-content:center;
+    }
+    .pill{ width:100%; padding:10px 12px; font-size:16px }
   }
-  .pill{
-    width: 100%;             /* 各佔一半寬 */
-    padding: 10px 12px;      /* 手機上縮小一點內距 */
-    font-size: 16px;         /* 手機上縮小字級以免換行 */
-  }
-}
-/* 💻 電腦上限制乘法表最大寬度，避免太扁 */
-@media (min-width: 1024px){
-  #learningPage .table-wrap{
-    max-width: 900px;   /* 想更寬就調這裡，例如 960px */
-    margin: 0 auto;     /* 置中 */
-  }
-}
-
-/* 📱 手機：不要太大、不產生左右滑動，靠近邊緣一點 */
-@media (max-width: 480px){
-  #learningPage .table-wrap{
-    padding: 0 6px;     /* 輕貼螢幕邊，不用負邊距 */
-    margin-left: 0;     /* 覆蓋你之前加的負邊距（若有） */
-    margin-right: 0;
-  }
-  #learningPage table.mul{
-    table-layout: fixed;                /* 平均分欄，避免撐出橫向卷動 */
-    font-size: clamp(12px, 3.6vw, 16px);/* 稍微放大，但不超出 */
-  }
-  #learningPage .mul th,
-  #learningPage .mul td{
-    padding: 6px 4px;  /* 比原本小一點，提升可視範圍 */
-  }
-  #learningPage .title{
-    font-size: clamp(24px, 6.5vw, 38px); /* 標題也微調，整體更均衡 */
-    margin-bottom: 14px;
-  }
-}
-
-
 </style>
+
 </head>
 <body>
 <div class="wrap">
@@ -579,6 +599,7 @@
 </script>
 </body>
 </html>
+
 
 
 

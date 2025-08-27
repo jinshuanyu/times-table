@@ -172,32 +172,35 @@
     font-size: 16px;         /* 手機上縮小字級以免換行 */
   }
 }
-/* 📱 讓乘法表在手機上更大、更貼近螢幕邊緣 */
-@media (max-width: 480px){
-
-  /* 把學習頁乘法表左右邊距吃掉一點，讓表格更寬 */
+/* 💻 電腦上限制乘法表最大寬度，避免太扁 */
+@media (min-width: 1024px){
   #learningPage .table-wrap{
-    margin-left: -10px;
-    margin-right: -10px;
-  }
-
-  /* 放大表格字體（原本是 clamp(12px, 2.3vw, 18px)） */
-  #learningPage table.mul{
-    font-size: clamp(14px, 4.2vw, 20px);
-  }
-
-  /* 稍微加大儲存格內距，閱讀更舒服 */
-  #learningPage .mul th,
-  #learningPage .mul td{
-    padding: 8px 8px;
-  }
-
-  /* （可選）標題也放大一點，整體更均衡 */
-  #learningPage .title{
-    font-size: clamp(26px, 7vw, 42px);
-    margin-bottom: 16px;
+    max-width: 900px;   /* 想更寬就調這裡，例如 960px */
+    margin: 0 auto;     /* 置中 */
   }
 }
+
+/* 📱 手機：不要太大、不產生左右滑動，靠近邊緣一點 */
+@media (max-width: 480px){
+  #learningPage .table-wrap{
+    padding: 0 6px;     /* 輕貼螢幕邊，不用負邊距 */
+    margin-left: 0;     /* 覆蓋你之前加的負邊距（若有） */
+    margin-right: 0;
+  }
+  #learningPage table.mul{
+    table-layout: fixed;                /* 平均分欄，避免撐出橫向卷動 */
+    font-size: clamp(12px, 3.6vw, 16px);/* 稍微放大，但不超出 */
+  }
+  #learningPage .mul th,
+  #learningPage .mul td{
+    padding: 6px 4px;  /* 比原本小一點，提升可視範圍 */
+  }
+  #learningPage .title{
+    font-size: clamp(24px, 6.5vw, 38px); /* 標題也微調，整體更均衡 */
+    margin-bottom: 14px;
+  }
+}
+
 
 </style>
 </head>
@@ -576,5 +579,6 @@
 </script>
 </body>
 </html>
+
 
 

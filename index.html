@@ -9,249 +9,270 @@
 <script src="https://unpkg.com/tone@14.8.49/build/Tone.js"></script>
 
 <style>
-  :root{
-    /* 基本色（移除所有漸層） */
-    --bg:#f7f8fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+:root{
+  /* 基本色（無漸層） */
+  --bg:#f7f8fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb;
 
-    --blue-50:#eff6ff; --blue-100:#dbeafe; --blue-200:#bfdbfe; --blue-800:#1e40af;
-    --yellow-100:#fef3c7; --yellow-300:#fcd34d; --yellow-800:#92400e;
+  --blue-50:#eff6ff; --blue-100:#dbeafe; --blue-200:#bfdbfe; --blue-800:#1e40af;
+  --yellow-100:#fef3c7; --yellow-300:#fcd34d; --yellow-800:#92400e;
 
-    --purple-200:#e9d5ff; --purple-300:#d8b4fe; --purple-500:#7c3aed;
-    --green-200:#bbf7d0; --green-300:#86efac; --green-500:#22c55e;
+  --purple-200:#e9d5ff; --purple-300:#d8b4fe; --purple-500:#7c3aed;
+  --green-200:#bbf7d0; --green-300:#86efac; --green-500:#22c55e;
 
-    --indigo-300:#a5b4fc; --indigo-400:#818cf8; --indigo-800:#3730a3; --indigo-900:#312e81;
-    --orange-200:#fed7aa; --orange-300:#fdba74; --orange-500:#f97316;
-    --red-500:#ef4444; --teal-50:#f0fdfa; --teal-600:#0d9488;
-  }
+  --indigo-300:#a5b4fc; --indigo-400:#818cf8; --indigo-800:#3730a3; --indigo-900:#312e81;
+  --orange-200:#fed7aa; --orange-300:#fdba74; --orange-500:#f97316;
+  --red-500:#ef4444; --teal-50:#f0fdfa; --teal-600:#0d9488;
 
-  *{ box-sizing:border-box }
-  html,body{ height:100% }
-  body{
-    margin:0; background:var(--bg); color:var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial;
-  }
+  /* 整站底色：很淡、低彩度的粉紅 */
+  --bg-pink:hsl(345 35% 98%);
+}
 
-  .wrap{
-    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:16px;
-  }
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0; background:var(--bg-pink); color:var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial;
+}
 
-  /* Top nav (兩顆 pill) */
-  nav{
-    margin-bottom:20px; padding:12px 16px; background:var(--card);
-    border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.06);
-    display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
-  }
-  .pill{
-    border:0; cursor:pointer; padding:10px 18px; border-radius:999px; font-weight:800; font-size:18px;
-    transition:transform .15s ease, background-color .15s ease, box-shadow .15s ease, color .15s ease;
-  }
-  .pill:hover{ transform:scale(1.05) }
-  .pill-purple{ background:var(--purple-200); color:#5b21b6 }
-  .pill-purple.active{ background:var(--purple-500); color:#fff; box-shadow:0 6px 16px rgba(124,58,237,.28) }
-  .pill-purple:hover{ background:var(--purple-300) }
-  .pill-green{ background:var(--green-200); color:#065f46 }
-  .pill-green.active{ background:var(--green-500); color:#fff; box-shadow:0 6px 16px rgba(34,197,94,.28) }
-  .pill-green:hover{ background:var(--green-300) }
-
-  /* 內容區 */
-  main{ width:100%; max-width:760px; padding:8px } /* 桌機收窄 */
-  section.card{ background:transparent }
-
-  h1.title{
-    font-size:clamp(28px,4vw,44px); margin:0 0 16px; font-weight:900; text-align:center; color:#2563eb;
-  }
-  /* 移除學習頁的說明文字 */
-  #learningPage .subtitle{ display:none !important; }
-
-  /* ========== Learning（10×10 乘法表） ========== */
-  .table-wrap{ overflow-x:auto }
-  table.mul{
-    width:100%;
-    border:1px solid var(--blue-200);
-    border-collapse:collapse;                  /* 緊實、不留縫 */
-    background:var(--blue-50);
-    border-radius:0 !important;                /* 不要圓角 */
-    box-shadow:0 8px 20px rgba(30,64,175,.06); /* 輕陰影即可 */
-    font-size:clamp(14px,3.8vw,18px);          /* 手機稍大、但不爆 */
-    table-layout:fixed;                        /* 平均分欄，防橫滑 */
-  }
-  .mul th,.mul td{
-    padding:7px 6px;
-    border-bottom:1px solid var(--blue-200);
-    text-align:center; white-space:nowrap;
-  }
-  .mul thead th{ background:var(--blue-100); color:var(--blue-800); font-weight:800 }
-  .mul tbody td:first-child{
-    background:#eaf2ff; color:#1d4ed8; font-weight:800; position:sticky; left:0;
-  }
-  .mul td.hl, .mul th.hl { background:#fff7cc !important }           /* 黃色淡亮 */
-  .mul td.hl-strong, .mul th.hl-strong{ background:#ffe066 !important }
-
-  /* 桌機：乘法表容器再收窄一點（避免太扁） */
-  @media (min-width:1024px){
-    #learningPage .table-wrap{
-      max-width:700px; margin-left:auto; margin-right:auto;
-    }
-  }
-  /* 手機：更貼邊（幾乎無留白） */
-  @media (max-width:480px){
-    .wrap{ padding-left:12px; padding-right:12px }
-    main{ padding:0 }
-    #learningPage .table-wrap{ margin-left:-8px; margin-right:-8px; padding:0 2px }
-  }
-
-  /* ========== Practice（練習） ========== */
-  .center{ text-align:center }
-  .score{ font-size:clamp(18px,2.5vw,28px); font-weight:800; color:#065f46; margin-bottom:8px }
-  .qcount{ font-size:clamp(16px,2.3vw,24px); color:#475569; margin-bottom:18px }
-
-  .question-box{
-    display:inline-block; background:var(--yellow-100); padding:22px;
-    border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.06);
-    margin-bottom:18px;
-  }
-  .question{ font-size:clamp(38px,6vw,62px); font-weight:900; color:var(--yellow-800); margin:0 }
-
-  .grid{ display:grid; gap:12px; margin:0 auto }
-  .grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px }
-  .grid-multipliers{ grid-template-columns:repeat(5,minmax(0,1fr)); max-width:720px; margin-bottom:8px } /* 與開始練習拉開 */
-  #btnStart{ margin-top:10px }
-
-  .btn{
-    border:0; cursor:pointer; padding:14px 16px; border-radius:14px; font-weight:900;
-    transition:transform .12s ease, box-shadow .15s ease, background-color .12s ease, color .12s ease;
-    box-shadow:0 4px 12px rgba(0,0,0,.06); font-size:clamp(18px,3.2vw,28px)
-  }
-  .btn:hover{ transform:scale(1.04) }
-
-  /* 答案選項 */
-  .btn-choice{ background:var(--indigo-300); color:#111827 }
-  .btn-choice:hover{ background:var(--indigo-400) }
-  .btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.08) }
-  .btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.03) }
-  .btn-choice.dim{ opacity:.55; cursor:not-allowed }
-
-  /* 乘數按鈕：一般數字橘色；🎲 綜合練習選中=深紫藍（非常明顯） */
-  .btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(20px,3.5vw,30px) }
-  .btn-multi.active{ background:var(--orange-500); color:#fff; box-shadow:0 6px 14px rgba(249,115,22,.28) }
-  .btn-multi:hover{ background:var(--orange-300) }
-  .btn-multi[data-val="all"].active{
-    background:var(--indigo-900) !important; color:#fff !important;
-    box-shadow:0 10px 20px rgba(49,46,129,.5) !important;
-    border-color:transparent !important;
-  }
-  .btn-multi[data-val="all"].active:hover{ background:var(--indigo-800) !important }
-
-  .btn-start{
-    background:#3b82f6; color:#fff; padding:14px 24px; border-radius:999px; font-weight:900; font-size:clamp(20px,3.8vw,32px);
-    box-shadow:0 8px 22px rgba(59,130,246,.28)
-  }
-  .btn-start:disabled{ background:#cbd5e1; color:#475569; cursor:not-allowed; box-shadow:none }
-
-  .feedback{ font-size:clamp(20px,3.2vw,32px); font-weight:900; margin-top:10px; animation:bounce 1s infinite }
-  @keyframes bounce{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
-
-  /* 結果表（保持素色、無漸層） */
-  .result-title{
-    font-size:clamp(28px,4vw,44px); font-weight:900; color:var(--teal-600);
-    text-align:center; margin:0 0 14px;
-  }
-  .score-badge{
-    display:inline-block; font-size:clamp(36px,6vw,56px); font-weight:900; color:var(--teal-600);
-    background:var(--teal-50); padding:18px 24px; border-radius:999px; box-shadow:0 8px 20px rgba(13,148,136,.18);
-    margin-bottom:16px;
-  }
-
-  .review{
-    background:var(--card); border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,.06);
-    padding:12px 14px; overflow-x:auto; margin:0 auto; max-width:800px;
-  }
-  table.review-table{ width:100%; border-collapse:collapse; min-width:520px; font-size:clamp(14px,2.5vw,18px) }
-  .review-table th,.review-table td{ padding:10px 12px; border-bottom:1px solid var(--line); text-align:left }
-  .review-table thead th{ background:var(--blue-100); color:var(--blue-800) }
-  .review-table tr:hover{ background:#f8fbff }
-  .tag-ok{ color:var(--green-500); font-weight:800 }
-  .tag-bad{ color:var(--red-500); font-weight:800 }
-
-  .actions{ margin-top:14px; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center }
-  @media (min-width:720px){ .actions{ flex-direction:row } }
-
-  .btn-secondary{
-    background:var(--orange-500); color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:900;
-    font-size:clamp(18px,3.2vw,28px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(249,115,22,.28)
-  }
-  .btn-secondary:hover{ transform:scale(1.04) }
-
-  .btn-tertiary{
-    background:var(--purple-500); color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:900;
-    font-size:clamp(18px,3.2vw,28px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(124,58,237,.28)
-  }
-  .btn-tertiary:hover{ transform:scale(1.04) }
-
-  /* 手機：導覽兩顆同排 */
-  @media (max-width:480px){
-    nav{
-      display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
-      gap:8px; justify-content:center;
-    }
-    .pill{ width:100%; padding:10px 12px; font-size:18px }
-  }
-
-  /* 保險：若有任何頁面底部用到偽元素做色塊，全部移除 */
-  #learningPage::after, #practicePage::after{ content:none !important; }
-
-  /* 版權區塊 */
-  .site-footer{
-    text-align:center; color:#6b7280; font-size:14px; padding:16px 12px; margin-top:20px;
-  }
-  /* 讓 .wrap 吃滿「實際可視高度」，footer 待在最底下，不會再把頁面撐高 */
 .wrap{
-  min-height: 100svh;           /* 用 svh/dvh 避開 100vh 的地址列問題 */
-  display: flex;
-  flex-direction: column;
+  min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:16px;
 }
 
-/* 讓 footer 貼底（但仍在 .wrap 裡），不會再多出多餘高度 */
-.site-footer{
-  margin-top: auto;
+/* ===== Top nav (兩顆 pill) ===== */
+nav{
+  margin-bottom:20px; padding:12px 16px; background:var(--card);
+  border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.06);
+  display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+}
+.pill{
+  border:0; cursor:pointer; padding:10px 18px; border-radius:999px; font-weight:800; font-size:18px;
+  transition:transform .15s ease, background-color .15s ease, box-shadow .15s ease, color .15s ease;
+}
+.pill:hover{ transform:scale(1.05) }
+.pill-purple{ background:var(--purple-200); color:#5b21b6 }
+.pill-purple.active{ background:var(--purple-500); color:#fff; box-shadow:0 6px 16px rgba(124,58,237,.28) }
+.pill-purple:hover{ background:var(--purple-300) }
+.pill-green{ background:var(--green-200); color:#065f46 }
+.pill-green.active{ background:var(--green-500); color:#fff; box-shadow:0 6px 16px rgba(34,197,94,.28) }
+.pill-green:hover{ background:var(--green-300) }
+
+/* 手機：導覽兩顆同排 */
+@media (max-width:480px){
+  nav{
+    display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:8px; justify-content:center;
+  }
+  .pill{ width:100%; padding:10px 12px; font-size:18px }
 }
 
-/* 手機上避免小小的 scale 造成高度外溢，直接關掉就好（可選） */
-@media (max-width: 480px){
-  .question-box{ transform: none; }
+/* ===== 內容區 ===== */
+main{ width:100%; max-width:760px; padding:8px } /* 桌機收窄 */
+section.card{ background:transparent }
+h1.title{
+  font-size:clamp(28px,4vw,44px); margin:0 0 16px; font-weight:900; text-align:center; color:#2563eb;
 }
-/* 📱 手機：1x~10x 每排 3 個，按鈕更寬更好按 */
+/* 移除學習頁的說明文字 */
+#learningPage .subtitle{ display:none !important; }
+
+/* ===== Learning（10×10 乘法表） ===== */
+.table-wrap{ overflow-x:auto }
+table.mul{
+  width:100%;
+  border:1px solid var(--blue-200);
+  border-collapse:collapse;
+  background:var(--blue-50);
+  border-radius:0 !important;                /* 不要圓角 */
+  box-shadow:0 8px 20px rgba(30,64,175,.06);
+  font-size:clamp(14px,3.8vw,18px);
+  table-layout:fixed;
+}
+.mul th,.mul td{
+  padding:7px 6px;
+  border-bottom:1px solid var(--blue-200);
+  text-align:center; white-space:nowrap;
+}
+.mul thead th{ background:var(--blue-100); color:var(--blue-800); font-weight:800 }
+.mul tbody td:first-child{
+  background:#eaf2ff; color:#1d4ed8; font-weight:800; position:sticky; left:0;
+}
+.mul td.hl, .mul th.hl { background:#fff7cc !important }
+.mul td.hl-strong, .mul th.hl-strong{ background:#ffe066 !important }
+
+/* 桌機：乘法表容器再收窄一點（避免太扁） */
+@media (min-width:1024px){
+  #learningPage .table-wrap{
+    max-width:700px; margin-left:auto; margin-right:auto;
+  }
+}
+/* 手機：更貼邊（幾乎無留白） */
+@media (max-width:480px){
+  .wrap{ padding-left:12px; padding-right:12px }
+  main{ padding:0 }
+  #learningPage .table-wrap{ margin-left:-8px; margin-right:-8px; padding:0 2px }
+}
+
+/* ===== Practice（練習） ===== */
+.center{ text-align:center }
+.score{ font-size:clamp(18px,2.5vw,28px); font-weight:800; color:#065f46; margin-bottom:8px }
+.qcount{ font-size:clamp(16px,2.3vw,24px); color:#475569; margin-bottom:18px }
+
+.question-box{
+  display:inline-block; background:var(--yellow-100); padding:22px;
+  border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.06);
+  margin-bottom:18px;
+}
+.question{ font-size:clamp(38px,6vw,62px); font-weight:900; color:var(--yellow-800); margin:0 }
+
+.grid{ display:grid; gap:12px; margin:0 auto }
+.grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px }
+.grid-multipliers{ grid-template-columns:repeat(5,minmax(0,1fr)); max-width:720px; margin-bottom:8px }
+#btnStart{ margin-top:10px }
+
+.btn{
+  border:0; cursor:pointer; padding:14px 16px; border-radius:14px; font-weight:900;
+  transition:transform .12s ease, box-shadow .15s ease, background-color .12s ease, color .12s ease;
+  box-shadow:0 4px 12px rgba(0,0,0,.06); font-size:clamp(18px,3.2vw,28px)
+}
+.btn:hover{ transform:scale(1.04) }
+
+/* 答案選項 */
+.btn-choice{ background:var(--indigo-300); color:#111827 }
+.btn-choice:hover{ background:var(--indigo-400) }
+.btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.08) }
+.btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.03) }
+.btn-choice.dim{ opacity:.55; cursor:not-allowed }
+
+/* 乘數按鈕 */
+.btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(20px,3.5vw,30px) }
+.btn-multi.active{ background:var(--orange-500); color:#fff; box-shadow:0 6px 14px rgba(249,115,22,.28) }
+.btn-multi:hover{ background:var(--orange-300) }
+.btn-multi[data-val="all"].active{
+  background:var(--indigo-900) !important; color:#fff !important;
+  box-shadow:0 10px 20px rgba(49,46,129,.5) !important;
+  border-color:transparent !important;
+}
+.btn-multi[data-val="all"].active:hover{ background:var(--indigo-800) !important }
+
+.btn-start{
+  background:#3b82f6; color:#fff; padding:14px 24px; border-radius:999px; font-weight:900; font-size:clamp(20px,3.8vw,32px);
+  box-shadow:0 8px 22px rgba(59,130,246,.28)
+}
+.btn-start:disabled{ background:#cbd5e1; color:#475569; cursor:not-allowed; box-shadow:none }
+
+.feedback{ font-size:clamp(20px,3.2vw,32px); font-weight:900; margin-top:10px; animation:bounce 1s infinite }
+@keyframes bounce{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
+
+/* 手機：1x~10x 每排 3 個，按鈕更寬更好按 */
 @media (max-width: 600px){
-  /* 乘數選單改 3 欄 */
   #practicePage .grid-multipliers{
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 10px !important;
     max-width: 100% !important;
   }
-
-  /* 🎲 綜合練習 仍占滿一整列，和下面數字留距離 */
   #practicePage .grid-multipliers > button[data-val="all"]{
     grid-column: 1 / -1;
     margin-bottom: 6px;
   }
-
-  /* 數字按鈕撐滿格子、加大觸控面積 */
   #practicePage .grid-multipliers > .btn-multi{
     width: 100%;
-    min-height: 54px;           /* 手指更好點 */
-    padding: 12px 8px;          /* 橫向更飽滿 */
-    font-size: 20px;            /* 視覺再清楚一點 */
-    justify-content: center;    /* 文案置中保險 */
+    min-height: 54px;
+    padding: 12px 8px;
+    font-size: 20px;
+    justify-content: center;
   }
 }
-/* 整站底色：很淡、低彩度的粉紅 */
-:root{
-  --bg: hsl(345 35% 98%);  /* 345° 粉紅相近色，35% 彩度、98% 亮度 */
+/* 手機上避免小小的 scale 造成高度外溢 */
+@media (max-width:480px){
+  .question-box{ transform:none }
 }
-body{
-  background: var(--bg) !important; /* 覆蓋任何先前設定 */
+
+/* ===== 結果頁（Result） ===== */
+.result-title{
+  font-size:clamp(22px,4.4vw,28px); font-weight:900; color:var(--teal-600);
+  text-align:center; margin:0 0 10px;
 }
+.score-badge{
+  display:inline-block; font-size:clamp(28px,7vw,36px); font-weight:900; color:var(--teal-600);
+  background:var(--teal-50); padding:12px 16px; border-radius:999px; box-shadow:0 8px 20px rgba(13,148,136,.18);
+  margin-bottom:12px;
+}
+/* 「你的最終得分是：」縮小一點 */
+#practicePage .result-title + p{
+  font-size:16px !important; margin:6px 0 8px !important;
+}
+
+/* 題目回顧標題：只縮結果頁這個 h2，不影響其他 .title */
+#practicePage .result-title ~ h2.title{
+  font-size:18px !important; line-height:1.3;
+  margin-top:8px !important; margin-bottom:8px !important;
+}
+
+/* 回顧卡片（手機邊距 12px、安全內距 12px、圓角） */
+.review{
+  background:var(--card); border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,.06);
+  padding:16px; overflow-x:auto; margin:0 auto; max-width:none;
+}
+@media (max-width:480px){
+  .review{
+    position:relative;
+    left:50%; right:50%;
+    margin-left:calc(-50vw + 12px) !important;
+    margin-right:calc(-50vw + 12px) !important;
+    width:calc(100vw - 24px) !important;
+    max-width:calc(100vw - 24px) !important;
+    padding:12px !important; border-radius:12px !important;
+  }
+}
+
+/* 回顧表格：最大寬度 540、置中；欄寬 56/22/22、表頭 18px */
+table.review-table{
+  width:100% !important;
+  max-width:540px !important;
+  margin-left:auto !important; margin-right:auto !important;
+  border-collapse:collapse;
+  table-layout:auto !important;
+  font-size:clamp(14px,2.5vw,16px);
+}
+.review-table th,.review-table td{
+  padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap;
+}
+.review-table thead th{
+  background:var(--blue-100); color:var(--blue-800);
+  font-size:18px !important; line-height:1.3; font-weight:700;
+}
+.review-table tr:hover{ background:#f8fbff }
+
+/* 欄位配置 */
+.review-table thead th:first-child,
+.review-table tbody td:first-child{
+  width:56% !important; text-align:left !important;
+}
+.review-table thead th:nth-child(2),
+.review-table thead th:nth-child(3),
+.review-table tbody td:nth-child(2),
+.review-table tbody td:nth-child(3){
+  width:22% !important; text-align:center !important;
+}
+
+.tag-ok{ color:var(--green-500); font-weight:800 }
+.tag-bad{ color:var(--red-500); font-weight:800 }
+
+/* 行動按鈕：固定字級 18px；手機一行一顆 */
+.actions{
+  margin-top:14px; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center
+}
+.actions .btn-secondary,
+.actions .btn-tertiary{
+  font-size:18px !important; line-height:1.2;
+}
+@media (min-width:720px){
+  .actions{ flex-direction:row }
+}
+
+/* 版權在底部 */
+.site-footer{ text-align:center; color:#6b7280; font-size:14px; padding:16px 12px; margin-top:auto }
+
 
 </style>
 
@@ -633,6 +654,7 @@ body{
 </script>
 </body>
 </html>
+
 
 
 

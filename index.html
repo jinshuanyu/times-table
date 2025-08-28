@@ -34,6 +34,7 @@ body{
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "Helvetica Neue", Arial;
 }
 
+/* 版面骨架 */
 .wrap{
   min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px;
@@ -67,7 +68,7 @@ nav{
 }
 
 /* ===== 內容區 ===== */
-main{ width:100%; max-width:760px; padding:8px } /* 桌機收窄 */
+main{ width:100%; max-width:760px; padding:8px }
 section.card{ background:transparent }
 h1.title{
   font-size:clamp(28px,4vw,44px); margin:0 0 16px; font-weight:900; text-align:center; color:#2563eb;
@@ -82,7 +83,7 @@ table.mul{
   border:1px solid var(--blue-200);
   border-collapse:collapse;
   background:var(--blue-50);
-  border-radius:0 !important;                /* 不要圓角 */
+  border-radius:0 !important;
   box-shadow:0 8px 20px rgba(30,64,175,.06);
   font-size:clamp(14px,3.8vw,18px);
   table-layout:fixed;
@@ -101,15 +102,13 @@ table.mul{
 
 /* 桌機：乘法表容器再收窄一點（避免太扁） */
 @media (min-width:1024px){
-  #learningPage .table-wrap{
-    max-width:700px; margin-left:auto; margin-right:auto;
-  }
+  #learningPage .table-wrap{ max-width:700px; margin-inline:auto; }
 }
 /* 手機：更貼邊（幾乎無留白） */
 @media (max-width:480px){
-  .wrap{ padding-left:12px; padding-right:12px }
+  .wrap{ padding-inline:12px }
   main{ padding:0 }
-  #learningPage .table-wrap{ margin-left:-8px; margin-right:-8px; padding:0 2px }
+  #learningPage .table-wrap{ margin-inline:-8px; padding-inline:2px }
 }
 
 /* ===== Practice（練習） ===== */
@@ -124,68 +123,66 @@ table.mul{
 }
 .question{ font-size:clamp(38px,6vw,62px); font-weight:900; color:var(--yellow-800); margin:0 }
 
+/* 選項與乘數格線 */
 .grid{ display:grid; gap:12px; margin:0 auto }
-.grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px }
+.grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:560px } /* 放大後拉寬 */
 .grid-multipliers{ grid-template-columns:repeat(5,minmax(0,1fr)); max-width:720px; margin-bottom:8px }
 #btnStart{ margin-top:10px }
 
+/* 基底按鈕（不指定底色，交由各類型決定） */
 .btn{
   border:0; cursor:pointer; padding:14px 16px; border-radius:14px; font-weight:900;
   transition:transform .12s ease, box-shadow .15s ease, background-color .12s ease, color .12s ease;
-  box-shadow:0 4px 12px rgba(0,0,0,.06); font-size:clamp(18px,3.2vw,28px)
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  font-size:clamp(18px,3.2vw,28px);
 }
 .btn:hover{ transform:scale(1.04) }
 
-/* 答案選項 */
-.btn-choice{ background:var(--indigo-300); color:#111827 }
+/* —— 答案選項（字加大） —— */
+.btn-choice{
+  background:var(--indigo-300); color:#111827 !important;
+  font-size:clamp(20px,5vw,30px);
+  padding:16px 14px;
+}
 .btn-choice:hover{ background:var(--indigo-400) }
 .btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.08) }
 .btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.03) }
 .btn-choice.dim{ opacity:.55; cursor:not-allowed }
 
-/* 乘數按鈕 */
-.btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(20px,3.5vw,30px) }
-.btn-multi.active{ background:var(--orange-500); color:#fff; box-shadow:0 6px 14px rgba(249,115,22,.28) }
+/* —— 乘數按鈕（字加大） —— */
+.btn-multi{
+  background:var(--orange-200); color:#7c2d12 !important;
+  font-size:clamp(22px,5.2vw,32px);
+  min-height:56px; padding:14px 10px;
+}
+.btn-multi.active{ background:var(--orange-500) !important; color:#fff !important; box-shadow:0 6px 14px rgba(249,115,22,.28) }
 .btn-multi:hover{ background:var(--orange-300) }
 .btn-multi[data-val="all"].active{
   background:var(--indigo-900) !important; color:#fff !important;
-  box-shadow:0 10px 20px rgba(49,46,129,.5) !important;
-  border-color:transparent !important;
+  box-shadow:0 10px 20px rgba(49,46,129,.5) !important; border-color:transparent !important;
 }
 .btn-multi[data-val="all"].active:hover{ background:var(--indigo-800) !important }
 
+/* —— 開始按鈕 —— */
 .btn-start{
-  background:#3b82f6; color:#fff; padding:14px 24px; border-radius:999px; font-weight:900; font-size:clamp(20px,3.8vw,32px);
+  background:#3b82f6 !important; color:#fff !important;
+  padding:14px 24px; border-radius:999px; font-weight:900;
+  font-size:clamp(20px,3.8vw,32px);
   box-shadow:0 8px 22px rgba(59,130,246,.28)
 }
-.btn-start:disabled{ background:#cbd5e1; color:#475569; cursor:not-allowed; box-shadow:none }
-
-.feedback{ font-size:clamp(20px,3.2vw,32px); font-weight:900; margin-top:10px; animation:bounce 1s infinite }
-@keyframes bounce{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
+.btn-start:disabled{ background:#cbd5e1 !important; color:#475569 !important; cursor:not-allowed; box-shadow:none }
 
 /* 手機：1x~10x 每排 3 個，按鈕更寬更好按 */
-@media (max-width: 600px){
+@media (max-width:600px){
   #practicePage .grid-multipliers{
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    max-width: 100% !important;
+    grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+    gap:10px !important; max-width:100% !important;
   }
-  #practicePage .grid-multipliers > button[data-val="all"]{
-    grid-column: 1 / -1;
-    margin-bottom: 6px;
-  }
-  #practicePage .grid-multipliers > .btn-multi{
-    width: 100%;
-    min-height: 54px;
-    padding: 12px 8px;
-    font-size: 20px;
-    justify-content: center;
-  }
+  #practicePage .grid-multipliers > button[data-val="all"]{ grid-column:1 / -1; margin-bottom:6px }
 }
-/* 手機上避免小小的 scale 造成高度外溢 */
-@media (max-width:480px){
-  .question-box{ transform:none }
-}
+
+/* 手機避免 scale 高度外溢 */
+@media (max-width:480px){ .question-box{ transform:none } }
 
 /* ===== 結果頁（Result） ===== */
 .result-title{
@@ -198,11 +195,9 @@ table.mul{
   margin-bottom:12px;
 }
 /* 「你的最終得分是：」縮小一點 */
-#practicePage .result-title + p{
-  font-size:16px !important; margin:6px 0 8px !important;
-}
+#practicePage .result-title + p{ font-size:16px !important; margin:6px 0 8px !important }
 
-/* 題目回顧標題：只縮結果頁這個 h2，不影響其他 .title */
+/* 題目回顧標題（只影響結果頁這個 h2） */
 #practicePage .result-title ~ h2.title{
   font-size:18px !important; line-height:1.3;
   margin-top:8px !important; margin-bottom:8px !important;
@@ -215,8 +210,7 @@ table.mul{
 }
 @media (max-width:480px){
   .review{
-    position:relative;
-    left:50%; right:50%;
+    position:relative; left:50%; right:50%;
     margin-left:calc(-50vw + 12px) !important;
     margin-right:calc(-50vw + 12px) !important;
     width:calc(100vw - 24px) !important;
@@ -225,13 +219,11 @@ table.mul{
   }
 }
 
-/* 回顧表格：最大寬度 540、置中；欄寬 56/22/22、表頭 18px */
+/* 回顧表格：最大 540、置中；欄寬 56/22/22、表頭 18px */
 table.review-table{
-  width:100% !important;
-  max-width:540px !important;
+  width:100% !important; max-width:540px !important;
   margin-left:auto !important; margin-right:auto !important;
-  border-collapse:collapse;
-  table-layout:auto !important;
+  border-collapse:collapse; table-layout:auto !important;
   font-size:clamp(14px,2.5vw,16px);
 }
 .review-table th,.review-table td{
@@ -242,39 +234,51 @@ table.review-table{
   font-size:18px !important; line-height:1.3; font-weight:700;
 }
 .review-table tr:hover{ background:#f8fbff }
-
 /* 欄位配置 */
 .review-table thead th:first-child,
-.review-table tbody td:first-child{
-  width:56% !important; text-align:left !important;
-}
+.review-table tbody td:first-child{ width:56% !important; text-align:left !important }
 .review-table thead th:nth-child(2),
 .review-table thead th:nth-child(3),
 .review-table tbody td:nth-child(2),
-.review-table tbody td:nth-child(3){
-  width:22% !important; text-align:center !important;
-}
+.review-table tbody td:nth-child(3){ width:22% !important; text-align:center !important }
 
 .tag-ok{ color:var(--green-500); font-weight:800 }
 .tag-bad{ color:var(--red-500); font-weight:800 }
 
-/* 行動按鈕：固定字級 18px；手機一行一顆 */
+/* 結果頁－行動按鈕（大號 pill、有彩色底） */
 .actions{
-  margin-top:14px; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center
+  margin-top:14px; display:flex; flex-direction:column; gap:12px;
+  align-items:center; justify-content:center;
 }
 .actions .btn-secondary,
 .actions .btn-tertiary{
-  font-size:18px !important; line-height:1.2;
+  font-size:clamp(20px,4.2vw,28px); line-height:1.2;
+  padding:14px 24px; border-radius:999px; font-weight:900;
+  min-height:54px; width:100%; max-width:420px;
+  transition:transform .12s ease, box-shadow .15s ease;
+  border:0; -webkit-appearance:none; appearance:none;
+  color:#fff !important; /* 保險：文字一定白色 */
 }
+.actions .btn-secondary{
+  background:var(--orange-500) !important;
+  box-shadow:0 10px 24px rgba(249,115,22,.28) !important;
+}
+.actions .btn-secondary:hover{ background:#fb923c !important }
+.actions .btn-tertiary{
+  background:var(--purple-500) !important;
+  box-shadow:0 10px 24px rgba(124,58,237,.28) !important;
+}
+.actions .btn-tertiary:hover{ background:#8b5cf6 !important }
+
 @media (min-width:720px){
   .actions{ flex-direction:row }
+  .actions .btn-secondary, .actions .btn-tertiary{ max-width:none }
 }
 
 /* 版權在底部 */
 .site-footer{ text-align:center; color:#6b7280; font-size:14px; padding:16px 12px; margin-top:auto }
-
-
 </style>
+
 
 </head>
 <body>
@@ -654,7 +658,6 @@ table.review-table{
 </script>
 </body>
 </html>
-
 
 
 

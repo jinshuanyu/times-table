@@ -33,13 +33,15 @@
   }
 
   .wrap{
-    min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100svh; /* 安全視窗高度 */
+    display:flex; flex-direction:column; align-items:center;
     padding:16px;
+    gap:12px; /* nav / main / footer 之間一定留白 */
   }
 
   /* Top nav (兩顆 pill) */
   nav{
-    margin-bottom:20px; padding:12px 16px; background:var(--card);
+    margin-bottom:0; padding:12px 16px; background:var(--card);
     border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.06);
     display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
   }
@@ -56,7 +58,7 @@
   .pill-green:hover{ background:var(--green-300) }
 
   /* 內容區 */
-  main{ width:100%; max-width:760px; padding:40px } /* 桌機收窄 */
+  main{ width:100%; max-width:760px; padding:24px } /* 桌機收窄，整體稍小 */
   section.card{ background:transparent }
 
   h1.title{
@@ -74,7 +76,7 @@
     background:var(--blue-50);
     border-radius:0 !important;                /* 不要圓角 */
     box-shadow:0 8px 20px rgba(30,64,175,.06); /* 輕陰影即可 */
-    font-size:clamp(14px,3.8vw,18px);          /* 手機稍大、但不爆 */
+    font-size:clamp(14px,3.6vw,18px);          /* 手機稍大、但不爆 */
     table-layout:fixed;                        /* 平均分欄，防橫滑 */
   }
   .mul th,.mul td{
@@ -104,37 +106,38 @@
 
   /* ========== Practice（練習） ========== */
   .center{ text-align:center }
-  .score{ font-size:clamp(18px,2.5vw,28px); font-weight:800; color:#065f46; margin-bottom:8px }
-  .qcount{ font-size:clamp(16px,2.3vw,24px); color:#475569; margin-bottom:18px }
+  .score{ font-size:clamp(16px,2.2vw,24px); font-weight:800; color:#065f46; margin-bottom:6px }
+  .qcount{ font-size:clamp(14px,2vw,20px); color:#475569; margin-bottom:14px }
 
   .question-box{
-    display:inline-block; background:var(--yellow-100); padding:22px;
+    display:inline-block; background:var(--yellow-100); padding:18px;
     border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.06);
-    margin-bottom:18px;
+    margin-bottom:14px;
   }
-  .question{ font-size:clamp(38px,6vw,62px); font-weight:900; color:var(--yellow-800); margin:0 }
+  .question{ font-size:clamp(34px,5.4vw,56px); font-weight:900; color:var(--yellow-800); margin:0 }
 
-  .grid{ display:grid; gap:12px; margin:0 auto }
+  .grid{ display:grid; gap:10px; margin:0 auto }
   .grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px }
-  .grid-multipliers{ grid-template-columns:repeat(5,minmax(0,1fr)); max-width:720px; margin-bottom:8px } /* 與開始練習拉開 */
-  #btnStart{ margin-top:10px }
+  .grid-multipliers{ grid-template-columns:repeat(5,minmax(0,1fr)); max-width:720px; margin-bottom:6px } /* 與開始練習拉開 */
+  #btnStart{ margin-top:8px }
 
+  /* ↓↓↓ 遊戲頁按鈕全體變小（選項 / 乘數 / 開始） ↓↓↓ */
   .btn{
-    border:0; cursor:pointer; padding:14px 16px; border-radius:14px; font-weight:900;
+    border:0; cursor:pointer; padding:10px 12px; border-radius:14px; font-weight:900;
     transition:transform .12s ease, box-shadow .15s ease, background-color .12s ease, color .12s ease;
-    box-shadow:0 4px 12px rgba(0,0,0,.06); font-size:clamp(18px,3.2vw,28px)
+    box-shadow:0 4px 12px rgba(0,0,0,.06); font-size:clamp(16px,2.8vw,22px);
   }
-  .btn:hover{ transform:scale(1.04) }
+  .btn:hover{ transform:scale(1.03) }
 
   /* 答案選項 */
   .btn-choice{ background:var(--indigo-300); color:#111827 }
   .btn-choice:hover{ background:var(--indigo-400) }
-  .btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.08) }
-  .btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.03) }
+  .btn-choice.correct{ background:var(--green-500) !important; color:#fff !important; transform:scale(1.06) }
+  .btn-choice.wrong{ background:var(--red-500) !important; color:#fff !important; transform:scale(1.02) }
   .btn-choice.dim{ opacity:.55; cursor:not-allowed }
 
   /* 乘數按鈕：一般數字橘色；🎲 綜合練習選中=深紫藍（非常明顯） */
-  .btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(20px,3.5vw,30px) }
+  .btn-multi{ background:var(--orange-200); color:#7c2d12; font-size:clamp(18px,3vw,24px) }
   .btn-multi.active{ background:var(--orange-500); color:#fff; box-shadow:0 6px 14px rgba(249,115,22,.28) }
   .btn-multi:hover{ background:var(--orange-300) }
   .btn-multi[data-val="all"].active{
@@ -145,50 +148,50 @@
   .btn-multi[data-val="all"].active:hover{ background:var(--indigo-800) !important }
 
   .btn-start{
-    background:#3b82f6; color:#fff; padding:14px 24px; border-radius:999px; font-weight:900; font-size:clamp(20px,3.8vw,32px);
+    background:#3b82f6; color:#fff; padding:12px 18px; border-radius:999px; font-weight:900; font-size:clamp(18px,3.2vw,26px);
     box-shadow:0 8px 22px rgba(59,130,246,.28)
   }
   .btn-start:disabled{ background:#cbd5e1; color:#475569; cursor:not-allowed; box-shadow:none }
 
-  .feedback{ font-size:clamp(20px,3.2vw,32px); font-weight:900; margin-top:10px; animation:bounce 1s infinite }
+  .feedback{ font-size:clamp(18px,3vw,28px); font-weight:900; margin-top:8px; animation:bounce 1s infinite }
   @keyframes bounce{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-6px) } }
 
   /* 結果表（保持素色、無漸層） */
   .result-title{
-    font-size:clamp(28px,4vw,44px); font-weight:900; color:var(--teal-600);
-    text-align:center; margin:0 0 14px;
+    font-size:clamp(26px,3.6vw,40px); font-weight:900; color:var(--teal-600);
+    text-align:center; margin:0 0 12px;
   }
   .score-badge{
-    display:inline-block; font-size:clamp(36px,6vw,56px); font-weight:900; color:var(--teal-600);
-    background:var(--teal-50); padding:18px 24px; border-radius:999px; box-shadow:0 8px 20px rgba(13,148,136,.18);
-    margin-bottom:16px;
+    display:inline-block; font-size:clamp(32px,5.2vw,50px); font-weight:900; color:var(--teal-600);
+    background:var(--teal-50); padding:14px 20px; border-radius:999px; box-shadow:0 8px 20px rgba(13,148,136,.18);
+    margin-bottom:14px;
   }
 
   .review{
     background:var(--card); border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,.06);
     padding:12px 14px; overflow-x:auto; margin:0 auto; max-width:800px;
   }
-  table.review-table{ width:100%; border-collapse:collapse; min-width:520px; font-size:clamp(14px,2.5vw,18px) }
+  table.review-table{ width:100%; border-collapse:collapse; min-width:520px; font-size:clamp(14px,2.3vw,18px) }
   .review-table th,.review-table td{ padding:10px 12px; border-bottom:1px solid var(--line); text-align:left }
   .review-table thead th{ background:var(--blue-100); color:var(--blue-800) }
   .review-table tr:hover{ background:#f8fbff }
   .tag-ok{ color:var(--green-500); font-weight:800 }
   .tag-bad{ color:var(--red-500); font-weight:800 }
 
-  .actions{ margin-top:14px; display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center }
+  .actions{ margin-top:12px; display:flex; flex-direction:column; gap:8px; align-items:center; justify-content:center }
   @media (min-width:720px){ .actions{ flex-direction:row } }
 
   .btn-secondary{
-    background:var(--orange-500); color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:900;
-    font-size:clamp(18px,3.2vw,28px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(249,115,22,.28)
+    background:var(--orange-500); color:#fff; border:0; padding:10px 16px; border-radius:999px; font-weight:900;
+    font-size:clamp(16px,2.8vw,22px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(249,115,22,.28)
   }
-  .btn-secondary:hover{ transform:scale(1.04) }
+  .btn-secondary:hover{ transform:scale(1.03) }
 
   .btn-tertiary{
-    background:var(--purple-500); color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:900;
-    font-size:clamp(18px,3.2vw,28px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(124,58,237,.28)
+    background:var(--purple-500); color:#fff; border:0; padding:10px 16px; border-radius:999px; font-weight:900;
+    font-size:clamp(16px,2.8vw,22px); transition:transform .12s ease; box-shadow:0 8px 20px rgba(124,58,237,.28)
   }
-  .btn-tertiary:hover{ transform:scale(1.04) }
+  .btn-tertiary:hover{ transform:scale(1.03) }
 
   /* 手機：導覽兩顆同排 */
   @media (max-width:480px){
@@ -202,60 +205,50 @@
   /* 保險：若有任何頁面底部用到偽元素做色塊，全部移除 */
   #learningPage::after, #practicePage::after{ content:none !important; }
 
-  /* 版權區塊 */
-  .site-footer{
-    text-align:center; color:#6b7280; font-size:14px; padding:16px 12px; margin-top:20px;
-  }
-  /* 讓 .wrap 吃滿「實際可視高度」，footer 待在最底下，不會再把頁面撐高 */
-.wrap{
-  min-height: 100svh;           /* 用 svh/dvh 避開 100vh 的地址列問題 */
-  display: flex;
-  flex-direction: column;
-}
-
-/* 讓 footer 貼底（但仍在 .wrap 裡），不會再多出多餘高度 */
-.site-footer{
-  margin-top: auto;
-}
-
-/* 手機上避免小小的 scale 造成高度外溢，直接關掉就好（可選） */
-@media (max-width: 480px){
-  .question-box{ transform: none; }
-}
-/* 📱 手機：1x~10x 每排 3 個，按鈕更寬更好按 */
-@media (max-width: 600px){
-  /* 乘數選單改 3 欄 */
-  #practicePage .grid-multipliers{
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    max-width: 100% !important;
+  /* 版權區塊（改用 .credits） */
+  .credits{
+    text-align:center; color:#6b7280; font-size:14px; padding:16px 12px;
+    width:100%;
+    margin-top:auto;              /* 讓 footer 貼底 */
+    padding-top:12px;             /* 與上方內容有空隙 */
+    border-top:1px solid var(--line);
   }
 
-  /* 🎲 綜合練習 仍占滿一整列，和下面數字留距離 */
-  #practicePage .grid-multipliers > button[data-val="all"]{
-    grid-column: 1 / -1;
-    margin-bottom: 6px;
+  /* 手機上避免小小的 scale 造成高度外溢 */
+  @media (max-width: 480px){
+    .question-box{ transform: none; }
   }
 
-  /* 數字按鈕撐滿格子、加大觸控面積 */
-  #practicePage .grid-multipliers > .btn-multi{
-    width: 100%;
-    min-height: 54px;           /* 手指更好點 */
-    padding: 12px 8px;          /* 橫向更飽滿 */
-    font-size: 20px;            /* 視覺再清楚一點 */
-    justify-content: center;    /* 文案置中保險 */
+  /* 📱 手機：1x~10x 每排 3 個，按鈕更好按（同時略縮小） */
+  @media (max-width: 600px){
+    #practicePage .grid-multipliers{
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 8px !important;
+      max-width: 100% !important;
+    }
+    #practicePage .grid-multipliers > button[data-val="all"]{
+      grid-column: 1 / -1;
+      margin-bottom: 6px;
+    }
+    #practicePage .grid-multipliers > .btn-multi{
+      width: 100%;
+      min-height: 48px;     /* 原 54，略縮 */
+      padding: 10px 8px;
+      font-size: 18px;
+      justify-content: center;
+    }
   }
-}
-/* 整站底色：很淡、低彩度的粉紅 */
-:root{
-  --bg: hsl(345 35% 98%);  /* 345° 粉紅相近色，35% 彩度、98% 亮度 */
-}
-body{
-  background: var(--bg) !important; /* 覆蓋任何先前設定 */
-}
-.credits {
-  width: 100%;
-  text-align: center;
+
+  /* 整站底色：很淡、低彩度的粉紅 */
+  :root{
+    --bg: hsl(345 35% 98%);
+  }
+  body{
+    background: var(--bg) !important;
+  }
+
+  /* 讓主要內容與 footer 永遠保有距離（不會被 margin 折疊吃掉） */
+  main{ padding-bottom:16px } /* 想更緊改 6px；更鬆改 24px */
 </style>
 
 </head>
@@ -282,14 +275,15 @@ body{
       <div id="practiceContainer" class="center"></div>
     </section>
   </main>
-<!-- Footer 聯絡資訊 -->
-<div class="credits text-base text-gray-600 leading-snug">
-  <a href="mailto:mamahowma@gmail.com" class="underline text-blue-700"><i class="fa-solid fa-envelope text-2xl"></i></a>　<a href="https://www.facebook.com/mamahowma" target="_blank" class="text-blue-600"><i class="fa-brands fa-facebook text-2xl"></i></a>　<a href="https://portaly.cc/mamahowma/support" target="_blank" class="text-yellow-700"><i class="fa-solid fa-mug-hot text-2xl"></i></a> 
- <br />
-  © 2025 Christina Yu. All rights reserved.</div>
 
+  <!-- Footer 聯絡資訊 -->
+  <div class="credits leading-snug" style="border-top:0">
+    © 2025 Christina Yu. All rights reserved.<br /><br /><a href="mailto:mamahowma@gmail.com" class="underline text-blue-700"><i class="fa-solid fa-envelope fa-xl fa-fw"></i></a>　
+    <a href="https://www.facebook.com/mamahowma" target="_blank" class="text-blue-600"><i class="fa-brands fa-facebook fa-xl fa-fw"></i></a>　
+    <a href="https://portaly.cc/mamahowma/support" target="_blank" class="text-yellow-700"><i class="fa-solid fa-mug-hot fa-xl fa-fw"></i></a>
+    
 
-
+  </div>
 </div>
 
 <script>
@@ -315,7 +309,6 @@ body{
   async function initializeAudioContext(){
     if (Tone.context.state !== 'running') {
       await Tone.start();
-      // create synth after user gesture
       if (!synth) synth = new Tone.Synth().toDestination();
       console.log('AudioContext is initialized and running!');
     } else {
@@ -449,10 +442,10 @@ body{
     state.roundStarted = false;
     state.showResult = false;
     practiceContainer.innerHTML = `
-      <h1 class="title" style="color:#16a34a; text-shadow:0 3px 0 rgba(255,255,255,.4); margin-bottom:18px">乘法大挑戰 🌟</h1>
+      <h1 class="title" style="color:#16a34a; text-shadow:0 3px 0 rgba(255,255,255,.4); margin-bottom:16px">乘法大挑戰 🌟</h1>
 
       <div class="grid grid-multipliers mb-6" id="multiGrid">
-        <button class="btn btn-multi" data-val="all" style="grid-column:1/-1; font-size:clamp(22px,4vw,34px); padding:18px 0; border-radius:18px; background:#c7d2fe; color:#1e3a8a; box-shadow:0 8px 22px rgba(30,58,138,.25)">🎲 綜合練習 (1~10)</button>
+        <button class="btn btn-multi" data-val="all" style="grid-column:1/-1; font-size:clamp(20px,3.4vw,26px); padding:14px 0; border-radius:18px; background:#c7d2fe; color:#1e3a8a; box-shadow:0 8px 22px rgba(30,58,138,.25)">🎲 綜合練習 (1~10)</button>
         ${Array.from({length:10},(_,i)=>i+1).map(n=>`<button class="btn btn-multi" data-val="${n}">${n}x</button>`).join('')}
       </div>
 
@@ -515,7 +508,7 @@ body{
   function renderQuiz(){
     const title = (state.selectedMultiplier === 'all') ? '綜合乘法練習 ✨' : `${state.selectedMultiplier} 的乘法練習 ✨`;
     practiceContainer.innerHTML = `
-      <h1 class="title" style="color:#9333ea; margin-bottom:10px">${title}</h1>
+      <h1 class="title" style="color:#9333ea; margin-bottom:8px">${title}</h1>
       <div class="score">得分：<span>${state.score}</span> / 100</div>
       <div class="qcount">題目 ${state.currentQuestionIndex+1} / 10</div>
 
@@ -593,10 +586,10 @@ body{
   function renderResult(){
     practiceContainer.innerHTML = `
       <h1 class="result-title">練習結束！🎉</h1>
-      <p style="text-align:center; font-size:clamp(20px,3.2vw,28px); margin:8px 0 12px">你的最終得分是：</p>
+      <p style="text-align:center; font-size:clamp(18px,2.8vw,26px); margin:6px 0 10px">你的最終得分是：</p>
       <div class="center"><span class="score-badge">${state.score} 分</span></div>
 
-      <h2 class="title" style="color:#2563eb; margin-top:12px; margin-bottom:12px">題目回顧</h2>
+      <h2 class="title" style="color:#2563eb; margin-top:10px; margin-bottom:10px">題目回顧</h2>
       <div class="review">
         <table class="review-table" aria-label="回顧表">
           <thead>
@@ -642,5 +635,3 @@ body{
 </script>
 </body>
 </html>
-
-

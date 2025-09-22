@@ -114,7 +114,7 @@
     border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.06);
     margin-bottom:14px;
   }
-  .question{ font-size:clamp(34px,5.4vw,56px); font-weight:900; color:var(--yellow-800); margin:0 }
+  .question{ font-size:clamp(34px,5.4vw,56px); font-weight:900; color:#92400e; margin:0 }
 
   .grid{ display:grid; gap:10px; margin:0 auto }
   .grid-choices{ grid-template-columns:repeat(2,minmax(0,1fr)); max-width:520px }
@@ -232,7 +232,7 @@
     }
     #practicePage .grid-multipliers > .btn-multi{
       width: 100%;
-      min-height: 48px;     /* 原 54，略縮 */
+      min-height: 48px;
       padding: 10px 8px;
       font-size: 18px;
       justify-content: center;
@@ -249,22 +249,21 @@
 
   /* 讓主要內容與 footer 永遠保有距離（不會被 margin 折疊吃掉） */
   main{ padding-bottom:16px } /* 想更緊改 6px；更鬆改 24px */
+
   /* 只放大：練習區的答案按鈕 */
-.grid-choices .btn-choice{
-  padding:16px 18px !important;             /* 觸控區更大 */
-  font-size:clamp(20px,3.6vw,28px) !important; /* 文字更大 */
-  min-height:60px;                           /* 高度更厚實 */
-  border-radius:16px;                        /* 視覺更圓潤 */
-}
-
-/* 手機再大一點、好點 */
-@media (max-width:480px){
   .grid-choices .btn-choice{
-    min-height:64px;
-    font-size:clamp(22px,5vw,30px) !important;
+    padding:16px 18px !important;             /* 觸控區更大 */
+    font-size:clamp(20px,3.6vw,28px) !important; /* 文字更大 */
+    min-height:60px;                           /* 高度更厚實 */
+    border-radius:16px;                        /* 視覺更圓潤 */
   }
-}
-
+  /* 手機再大一點、好點 */
+  @media (max-width:480px){
+    .grid-choices .btn-choice{
+      min-height:64px;
+      font-size:clamp(22px,5vw,30px) !important;
+    }
+  }
 </style>
 
 </head>
@@ -294,11 +293,10 @@
 
   <!-- Footer 聯絡資訊 -->
   <div class="credits leading-snug" style="border-top:0">
-    © 2025 Christina Yu. All rights reserved.<br /><br /><a href="mailto:mamahowma@gmail.com" class="underline text-blue-700"><i class="fa-solid fa-envelope fa-xl fa-fw"></i></a>　
-    <a href="https://www.facebook.com/mamahowma" target="_blank" class="text-blue-600"><i class="fa-brands fa-facebook fa-xl fa-fw"></i></a>　
-    <a href="https://portaly.cc/mamahowma/support" target="_blank" class="text-yellow-700"><i class="fa-solid fa-mug-hot fa-xl fa-fw"></i></a>
-    
-
+    © 2025 Christina Yu. All rights reserved.<br /><br />
+    <a href="mailto:mamahowma@gmail.com"><i class="fa-solid fa-envelope fa-xl fa-fw"></i></a>　
+    <a href="https://www.facebook.com/mamahowma" target="_blank"><i class="fa-brands fa-facebook fa-xl fa-fw"></i></a>　
+    <a href="https://portaly.cc/mamahowma/support" target="_blank"><i class="fa-solid fa-mug-hot fa-xl fa-fw"></i></a>
   </div>
 </div>
 
@@ -316,7 +314,9 @@
     showResult: false,
     selectedAnswer: null,
     isCorrect: null,
-    history: []
+    history: [],
+    questionPool: [],          // 本回合題庫（10 題，不重複）
+    lastCorrectIndex: null     // 上一題正確答案所在按鈕索引（0..3）
   };
 
   // ----- Audio via Tone.js -----
@@ -451,6 +451,68 @@
     document.querySelectorAll('#mulTable .hl, #mulTable .hl-strong').forEach(el => el.classList.remove('hl','hl-strong'));
   }
 
+  // ====== 新增：題庫 & 出題 ======
+  function shuffle(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildQuestionPool(multiplier){
+    const pool = [];
+    if (multiplier === 'all'){
+      // 只取「不考交換重複」的組合（a <= b），總數 55 題
+      for (let a=1; a<=10; a++){
+        for (let b=a; b<=10; b++){
+          pool.push({factor1:a, factor2:b, answer:a*b});
+        }
+      }
+      shuffle(pool);
+      return pool.slice(0,10); // 抽 10 題
+    } else {
+      // 固定乘數 × 1..10（10 題）
+      for (let b=1; b<=10; b++){
+        pool.push({factor1:multiplier, factor2:b, answer:multiplier*b});
+      }
+      return shuffle(pool);
+    }
+  }
+
+  function makeWrongOptions(answer){
+    const set = new Set();
+    while (set.size < 3){
+      const delta = Math.floor(Math.random()*21) - 10; // -10..+10
+      const cand = answer + delta;
+      if (cand > 0 && cand !== answer) set.add(cand);
+    }
+    return shuffle(Array.from(set));
+  }
+
+  // 保證：正確答案按鈕位置亂數，且不與上一題相同
+  function placeAnswerWithConstraint(answer, wrongs){
+    const prev = state.lastCorrectIndex;
+    let idx = Math.floor(Math.random()*4); // 0..3
+    if (prev !== null && idx === prev){
+      idx = (idx + 1 + Math.floor(Math.random()*3)) % 4; // 換個位
+    }
+    const opts = wrongs.slice(0,3);
+    opts.splice(idx, 0, answer); // 在 idx 插入正解
+    state.lastCorrectIndex = idx;
+    return opts;
+  }
+
+  function setQuestionFromPool(index){
+    const q = state.questionPool[index];
+    const wrongs = makeWrongOptions(q.answer);
+    const options = placeAnswerWithConstraint(q.answer, wrongs);
+    state.currentQuestion = q;
+    state.options = options;
+    state.selectedAnswer = null;
+    state.isCorrect = null;
+  }
+
   // ----- Practice Flow -----
   const practiceContainer = document.getElementById('practiceContainer');
 
@@ -494,31 +556,10 @@
     state.roundStarted = true;
     state.showResult = false;
     state.history = [];
-    generateQuestion(state.selectedMultiplier);
-  }
-
-  function generateQuestion(multiplier){
-    let factor1, factor2;
-    if (multiplier === 'all'){
-      factor1 = Math.floor(Math.random()*10)+1;
-      factor2 = Math.floor(Math.random()*10)+1;
-    } else {
-      factor1 = multiplier;
-      factor2 = Math.floor(Math.random()*10)+1;
-    }
-    const answer = factor1 * factor2;
-
-    const set = new Set([answer]);
-    while(set.size < 4){
-      const wrong = answer + (Math.floor(Math.random()*20) - 10);
-      if (wrong > 0 && wrong !== answer) set.add(wrong);
-    }
-    const options = Array.from(set).sort(()=>Math.random()-0.5);
-
-    state.currentQuestion = {factor1, factor2, answer};
-    state.options = options;
-    state.selectedAnswer = null;
-    state.isCorrect = null;
+    state.lastCorrectIndex = null; // 重置連續位置檢查
+    // 先建題庫（10 題），再載入第一題
+    state.questionPool = buildQuestionPool(state.selectedMultiplier);
+    setQuestionFromPool(0);
   }
 
   function renderQuiz(){
@@ -557,7 +598,7 @@
       allBtns.forEach(b=>{
         const val = Number(b.getAttribute('data-val'));
         if (val === state.currentQuestion.answer){
-          b.classList.add('correct'); // always show correct in GREEN
+          b.classList.add('correct'); // 正確顯示綠色
         } else if (val === selected && !correct){
           b.classList.add('wrong');
         } else {
@@ -589,7 +630,7 @@
       setTimeout(()=>{
         if (state.currentQuestionIndex < 9){
           state.currentQuestionIndex += 1;
-          generateQuestion(state.selectedMultiplier);
+          setQuestionFromPool(state.currentQuestionIndex); // 從題庫取下一題（不重複，且正解位置不連續）
           renderQuiz();
         } else {
           state.showResult = true;
@@ -651,4 +692,3 @@
 </script>
 </body>
 </html>
-

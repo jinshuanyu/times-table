@@ -249,6 +249,22 @@
 
   /* 讓主要內容與 footer 永遠保有距離（不會被 margin 折疊吃掉） */
   main{ padding-bottom:16px } /* 想更緊改 6px；更鬆改 24px */
+  /* 只放大：練習區的答案按鈕 */
+.grid-choices .btn-choice{
+  padding:16px 18px !important;             /* 觸控區更大 */
+  font-size:clamp(20px,3.6vw,28px) !important; /* 文字更大 */
+  min-height:60px;                           /* 高度更厚實 */
+  border-radius:16px;                        /* 視覺更圓潤 */
+}
+
+/* 手機再大一點、好點 */
+@media (max-width:480px){
+  .grid-choices .btn-choice{
+    min-height:64px;
+    font-size:clamp(22px,5vw,30px) !important;
+  }
+}
+
 </style>
 
 </head>
@@ -635,3 +651,4 @@
 </script>
 </body>
 </html>
+

@@ -496,25 +496,57 @@
     return arr;
   }
 
-  function buildQuestionPool(multiplier){
-    const pool = [];
-    if (multiplier === 'all'){
-      // 只取「不考交換重複」的組合（a <= b），總數 55 題
-      for (let a=1; a<=10; a++){
-        for (let b=a; b<=10; b++){
-          pool.push({factor1:a, factor2:b, answer:a*b});
-        }
+function buildQuestionPool(multiplier){
+  const pool = [];
+  if (multiplier === 'all'){
+    // 產生不重複（a <= b）的 1..10 × 1..10 題庫
+    for (let a = 1; a <= 10; a++){
+      for (let b = a; b <= 10; b++){
+        pool.push({ factor1: a, factor2: b, answer: a*b });
       }
-      shuffle(pool);
-      return pool.slice(0,10); // 抽 10 題
-    } else {
-      // 固定乘數 × 1..10（10 題）
-      for (let b=1; b<=10; b++){
-        pool.push({factor1:multiplier, factor2:b, answer:multiplier*b});
-      }
-      return shuffle(pool);
     }
+    shuffle(pool); // 打散
+
+    // 挑 10 題，限制：含 1 的最多 1 題；含 10 的最多 1 題
+    const selected = [];
+    let countOne = 0;
+    let countTen = 0;
+
+    for (const q of pool){
+      const has1 = (q.factor1 === 1 || q.factor2 === 1);
+      const has10 = (q.factor1 === 10 || q.factor2 === 10);
+
+      // 超過名額就跳過
+      if ((has1 && countOne >= 1) || (has10 && countTen >= 1)) continue;
+
+      selected.push(q);
+      if (has1) countOne++;
+      if (has10) countTen++;
+      if (selected.length === 10) break;
+    }
+
+    // 理論上一定會滿 10 題；保險：若未滿，再從「不含 1/10」的題目補齊
+    if (selected.length < 10){
+      for (const q of pool){
+        if (selected.includes(q)) continue;
+        const has1 = (q.factor1 === 1 || q.factor2 === 1);
+        const has10 = (q.factor1 === 10 || q.factor2 === 10);
+        if (has1 || has10) continue; // 仍然維持限制，不拿超標的
+        selected.push(q);
+        if (selected.length === 10) break;
+      }
+    }
+
+    return selected;
+  } else {
+    // 固定乘數 × 1..10（10 題）
+    for (let b = 1; b <= 10; b++){
+      pool.push({ factor1: multiplier, factor2: b, answer: multiplier*b });
+    }
+    return shuffle(pool);
   }
+}
+
 
   function makeWrongOptions(answer){
     const set = new Set();
@@ -728,4 +760,5 @@
 </script>
 </body>
 </html>
+
 

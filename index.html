@@ -264,6 +264,42 @@
       font-size:clamp(22px,5vw,30px) !important;
     }
   }
+  /* === 桌機：乘法表更窄一點，避免太扁 === */
+@media (min-width: 1024px){
+  /* 整體主寬也微收窄（760 → 720） */
+  main{
+    max-width: 720px !important;
+  }
+  /* 讓 10×10 表的容器更窄（以較短邊為基準），置中 */
+  #learningPage .table-wrap{
+    max-width: min(88vmin, 620px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* === 桌機：練習頁的按鈕容器「稍微」窄一點 === */
+@media (min-width: 1024px){
+  /* 乘數選擇那一排（含 🎲 綜合 + 1x~10x） */
+  #practicePage .grid-multipliers{
+    max-width: min(92vmin, 600px) !important;  /* 原本 720px → 600px 左右 */
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  /* 四個答案選項的區塊 */
+  #practicePage .grid-choices{
+    max-width: min(92vmin, 480px) !important;  /* 原本 520px → 480px 左右 */
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  /* 開始按鈕也跟著容器縮，保持視覺一致（不拉滿整行） */
+  #practicePage #btnStart{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 </style>
 
 </head>
@@ -692,3 +728,4 @@
 </script>
 </body>
 </html>
+
